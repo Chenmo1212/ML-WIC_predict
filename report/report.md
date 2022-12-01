@@ -24,7 +24,29 @@ Based on the data and the number of participants in `WIC` over the years, we are
 
 ## 3. Methods
 
+Our analysis contains five different learning algorithms, that includes `Kernel Ridge Regression`(KRR), `Lasso Regression`, `ElasticNet`, `Decision Tree` and `Multi-layer Perceptron Regressor`(MLPRegressor). We are explaining each of the algorithms subsequently:
+
+### 3.1 Kernel Ridge Regression
+
+### 3.2 Lasso Regression
+
+### 3.3 ElasticNet
+
+### 3.4 Decision Tree
+
+### 3.5 Multi-layer Perceptron Regressor
+
 ## 4. Experiments/Results/Discussion
+
+### 4.1 Kernel Ridge Regression
+
+### 4.2 Lasso Regression
+
+### 4.3 ElasticNet
+
+### 4.4 Decision Tree
+
+### 4.5 Multi-layer Perceptron Regressor
 
 ## 5. Summary
 
