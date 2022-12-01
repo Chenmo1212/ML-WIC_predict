@@ -28,6 +28,10 @@ Our analysis contains five different learning algorithms, that includes `Kernel 
 
 ### 3.1 ElasticNet
 
+link: [变量的选择——Lasso&Ridge&ElasticNet - 冬色 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mengnan/p/9307615.html)
+
+这篇解释蛮不错的，在写这部分的原理之前，可以参考一下。
+
 ### 3.2 Decision Tree
 
 ### 3.3 Multi-layer Perceptron Regressor
