@@ -28,7 +28,18 @@ Our analysis contains five different learning algorithms, that includes `Kernel 
 
 ### 3.1 ElasticNet
 
-link: [变量的选择——Lasso&Ridge&ElasticNet - 冬色 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mengnan/p/9307615.html)
+原理，基于L1与L2进行正则化。公式：
+$$
+L(\bar{w})=\frac{1}{2 n}\|X \bar{w}-\bar{y}\|_{2}^{2}+\alpha \beta\|\bar{w}\|_{1}+\frac{\alpha(1-\beta)}{2}\|\bar{w}\|_{2}^{2}
+$$
+
+
+reference link:
+
+- [变量的选择——Lasso&Ridge&ElasticNet - 冬色 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mengnan/p/9307615.html)
+- [机器学习算法之岭回归、Lasso回归和ElasticNet回归 – 标点符 (biaodianfu.com)](https://www.biaodianfu.com/ridge-lasso-elasticnet.html)
+
+
 
 这篇解释蛮不错的，在写这部分的原理之前，可以参考一下。
 
