@@ -44,6 +44,7 @@ And the seleted features set is:
 | SUPERCPTH16 | CONVSPTH16      | SPECSPTH16               | WICSPTH16     | FFRPTH16  |   |   |   |   |   |
 | FSRPTH16    | FOODINSEC_15_17 | FMRKT_WIC18              | POVRATE15     | PCT_WIC17 |   |   |   |   |   |
 
+![下载](report.assets/test.png)
 
 
 ## 3. Methods
