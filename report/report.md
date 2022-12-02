@@ -21,20 +21,25 @@ Member:
 Based on the data and the number of participants in `WIC` over the years, we are trying to build some models to predict the number of participants in `WIC` in the future.
 
 ## 2. Dataset and Features
+This file consists of 31481 lines of data and contains multiple spreadsheets:
+ - A variable list that includes metadata about all of the variables that are mapped in the Food Environment Atlas.
+ - Spreadsheets that contain data for each of the Food Environment Atlas categories.
+ - County- and State-level supplemental data that were used as the basis for a number of calculations in the Food Environment Atlas.
+We acquire our data of the Food Environment Atlas from the open data website of U.S. Department of Agriculture. After basic detection of the dataset, we decided to delete the duplication lines in all spreadsheets. Considering that there are obvious correlations between some of the initially chosen features, such as the poverty rate of a city and the child poverty rate, we need to perform a correlation analysis for each group of variables that may be correlated, and then pick up some features that can be used for training the model. Here, the Pearson correlation coefficients between different features in each group are calculated to determine their linear correlations, thus achieving a preliminary correlation analysis as a part of feature seletion.
 
 ## 3. Methods
 
 Our analysis contains five different learning algorithms, that includes `Kernel Ridge Regression`(KRR), `Lasso Regression`, `ElasticNet`, `Decision Tree` and `Multi-layer Perceptron Regressor`(MLPRegressor). We are explaining each of the algorithms subsequently:
 
+
 ### 3.1 ElasticNet
 
-link: [变量的选择——Lasso&Ridge&ElasticNet - 冬色 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mengnan/p/9307615.html)
-
-这篇解释蛮不错的，在写这部分的原理之前，可以参考一下。
 
 ### 3.2 Decision Tree
 
 ### 3.3 Multi-layer Perceptron Regressor
+
+A neural network is a combination of lots of general process units. MLP is a type of artificial neural network (ANN). Its simplest form consists of at least three layers of nodes: an input layer, a hidden layer and an output layer. MLP is a feed-forward neural network where all neurons are arranged in an acyclic graph. We still evalute the l1_ratio of MLP by cross-validation 
 
 ## 4. Experiments/Results/Discussion
 
