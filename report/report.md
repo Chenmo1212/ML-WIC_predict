@@ -27,60 +27,59 @@ This file consists of 31481 lines of data and contains smultiple spreadsheets:
  - Spreadsheets that contain data for each of the Food Environment Atlas categories.
  - County- and State-level supplemental data that were used as the basis for a number of calculations in the Food Environment Atlas.
 
-A snippet of the dataset in the "ACCESS" table:
+We acquire our data of the Food Environment Atlas from the open data website of U.S. Department of Agriculture. After basic detection of the dataset, we decided to delete the duplication lines in all spreadsheets. Considering that there are obvious correlations between some of the initially chosen features, such as the poverty rate of a city and the child poverty rate, we need to perform a correlation analysis for each group of variables that may be correlated, and then pick up some features that can be used for training the model. Here, the `Pearson` correlation coefficients between different features in each group are calculated to determine their linear correlations, thus achieving a preliminary correlation analysis as a part of feature selection.
 
-| State   | LACCESS_POP15 | GROCPTH16 |
-|:-------:|:-------------:|:---------:|
-| Alabama | 17496.693040  | 0.054271  |
-| Alabama | 30561.264430  | 0.139753  |
-| Alabama | 6069.523628   | 0.155195  |
+During data import phase, we normalize data by convert feature values from their original range into a standard range (0,1), while calculating the means and standard deviations of `cross_val_score`. To visualize its scores, we plot `heatmap` to display the result.
 
-We acquire our data of the Food Environment Atlas from the open data website of U.S. Department of Agriculture. After basic detection of the dataset, we decided to delete the duplication lines in all spreadsheets. Considering that there are obvious correlations between some of the initially chosen features, such as the poverty rate of a city and the child poverty rate, we need to perform a correlation analysis for each group of variables that may be correlated, and then pick up some features that can be used for training the model. Here, the Pearson correlation coefficients between different features in each group are calculated to determine their linear correlations, thus achieving a preliminary correlation analysis as a part of feature seletion.
-During data import phase, we normalize data by convert feature values from their original range into a standard range (0,1) while calculating the means and standard deviations of cross_val_score. To visualize its scores, we plot error bar to display the graph.
-The initial set of features set is: 
-|               |                |                 |                 |                   |
-|:-------------:|:--------------:|:---------------:|:---------------:|:-----------------:|
-| LACCESS_POP15 | LACCESS_LOWI15 | LACCESS_HHNV15  | LACCESS_CHILD15 | LACCESS_SENIORS15 | POVRATE15       |
-| GROCPTH16     | SUPERCPTH16    | CONVSPTH16      | SPECSPTH16      | WICSPTH16         | CHILDPOVRATE15  |
-| FFRPTH16      | FSRPTH16       | FOODINSEC_15_17 | VLFOODSEC_15_17 | FMRKT_WIC18       | FMRKT_WICCASH18 |
+The initial feature groups are: 
 
-And the seleted features set is:
+- LACCESS_POP15, LACCESS_LOWI15, LACCESS_HHNV15, LACCESS_CHILD15, LACCESS_SENIORS15
+- GROCPTH16, SUPERCPTH16, CONVSPTH16, SPECSPTH16, WICSPTH16
+- FFRPTH16, FSRPTH16
+- FOODINSEC_15_17, VLFOODSEC_15_17
+- FMRKT_WIC18, FMRKT_WICCASH18
+- POVRATE15, CHILDPOVRATE15
 
-|             |                 |                          |               |           |  
-|:-----------:|:---------------:|:------------------------:|:-------------:|:---------:|
-| County      | State           | Population_Estimate_2016 | LACCESS_POP15 | GROCPTH16 |
-| SUPERCPTH16 | CONVSPTH16      | SPECSPTH16               | WICSPTH16     | FFRPTH16  |
-| FSRPTH16    | FOODINSEC_15_17 | FMRKT_WIC18              | POVRATE15     | PCT_WIC17 |
+Here is the heatmap of correlation:
 
-Here is the heatmap of correlation
-![Heatmap 0](corr/corr_heatmap_0.jpg)
-![Heatmap 0](corr/corr_heatmap_1.jpg)
-![Heatmap 0](corr/corr_heatmap_2.jpg)
-![Heatmap 0](corr/corr_heatmap_3.jpg)
-![Heatmap 0](corr/corr_heatmap_4.jpg)
-![Heatmap 0](corr/corr_heatmap_5.jpg)
+> ![total](report.assets/total.jpg)
+>
+> <p align=center>Figure 1: Heat map plot of different feature groups</p>
+
+Through the correlation results, it can be seen that there is a great correlation in the first group, so after discussion, we choose to leave `LACCESS_POP15` as a feature. There is a low correlation in the second group, so we can leave all features. In the end, we left a total of 12 variables. Use the following code to use the filtered variables as data for machine learning：
+
+```python
+preserve_columns = ['State','LACCESS_POP15','GROCPTH16', 'SUPERCPTH16', 'CONVSPTH16', 'SPECSPTH16', 'WICSPTH16', 'FFRPTH16', 'FSRPTH16', 'FOODINSEC_15_17', 'FMRKT_WIC18', 'POVRATE15', 'PCT_WIC17']
+
+raw_data['PCT_WIC17'] = raw_data['PCT_WIC17'] * raw_data['Population_Estimate_2016'] / 100
+raw_data['FOODINSEC_15_17'] = raw_data['FOODINSEC_15_17'] * raw_data['Population_Estimate_2016'] / 100
+raw_data['POVRATE15'] = raw_data['POVRATE15'] * raw_data['Population_Estimate_2016'] / 100
+
+raw_data = raw_data[preserve_columns]
+```
 
 
 ## 3. Methods
 
-Our analysis contains five different learning algorithms, that includes `Kernel Ridge Regression`(KRR), `ElasticNet`, `Decision Tree` and `Multi-layer Perceptron Regressor`(MLPRegressor). We are going to give brief explaination to each algorithm subsequently:
+Our analysis contains three different learning algorithms, that includes `ElasticNet`, `Decision Tree` and `Multi-layer Perceptron Regressor`(MLPRegressor). We are explaining each of the algorithms subsequently:
 
 ### 3.1 ElasticNet
 
-Elastic net linear regression uses a weighted penalties combined from both the lasso and ridge regression models to overcome the limitations of the LASSO. Below is the cost function for ElasticNet.
+We have learned `Ridge` regression and `Lasso `regression are two regression methods. They appear to solve the over-fitting of linear regression and the irreversibility of $(X^TX)$ in the process of solving $θ$ through the normal equation method. For the class of problems, both regressions achieve their goals by introducing a regularization term in the loss function. In order to prevent over-fitting ( $θ$ is too large), a complexity penalty factor, that is, a regular term, is added after the objective function $J(\theta)$ to prevent over-fitting.
 
-![ElasticNet](https://miro.medium.com/max/640/1*XjDc54wcUkLcnSXmYjIH4Q.webp)
-
-Lasso tends to choose one variable (sparsity inducing) from significantly correlated groups among features and completely ignore the rest. Comparing to lasso, ElasticNet can performs a more effective regularization on dataset. It eliminates the limitations of lasso by introducing a quadratic expression in the penalty. So, it needs to determines the hyperparameter of the ridge(alpha) and then the hyperparameter of lasso(l1_ratio).
-
+The loss function of `ElasticNet` is:
+$$
+L(\bar{w})=\frac{1}{2 n}\|X \bar{w}-\bar{y}\|_{2}^{2}+\alpha \beta\|\bar{w}\|_{1}+\frac{\alpha(1-\beta)}{2}\|\bar{w}\|_{2}^{2}
+$$
+As can be seen from the above formula, two parameters $α$ and $β$ need to be provided when using `ElasticNet`. The name of the parameter in $β$ is **L1_ratio**. In the experimental part, these two parameters will be tuned using cross-validation.
 
 ### 3.2 Decision Tree
 
-Decision Trees (DTs) are a non-parametric supervised learning method used for classification and regression. The goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. A decision tree can be seen as a piecewise constant approximation. Here, we apply DecisionTreeRegressor of which the decision or the outcome variable is Continuous to our regression problem. The randomness of DecisionTreeRegressor is decided by using random_state as a seed for random selection of features. So we finalize it via cross validation estimator. We evaluate the quality of its split via all four criterion function:{squared_error, friedman_mse, absolute_error, poisson}.
+`Decision Trees` (DTs) are a non-parametric supervised learning method used for classification and regression. The goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. A `decision tree` can be seen as a piecewise constant approximation. Here, we apply `DecisionTreeRegressor` of which the decision or the outcome variable is Continuous to our regression problem. The randomness of `DecisionTreeRegressor` is decided by using random_state as a seed for random selection of features. So we finalize it via cross validation estimator and set random_state to 23. In addition, we will use cross-validation to train the **max_depth** parameter of the decision tree in the experimental part.
 
 ### 3.3 Multi-layer Perceptron Regressor
 
-A neural network is a combination of lots of general process units. MLP is a type of artificial neural network (ANN). Its simplest form consists of at least three layers of nodes: an input layer, a hidden layer and an output layer. The input layer obtains the values of input features for processing. The output layer has only one single unit and performs tasks such as classification and regression. It is a feed-forward neural network where all units are arranged in an acyclic graph. The other layers which don't belong to these two types of layers are hidden layers. Every unit in every layer is connected to every unit in the next layer. And the non-linearity comes from nodes in the hidden layers.
+A neural network is a combination of lots of general process units. `MLP` is a type of artificial neural network (ANN). Its simplest form consists of at least three layers of nodes: an input layer, a hidden layer and an output layer. `MLP` is a feed-forward neural network where all neurons are arranged in an acyclic graph. We still evaluate the `l1_ratio` of `MLP` by cross-validation. In addition, we will use cross-validation to train the **hidden_layer_sizes** parameter and **learning_rate_init** of the decision tree in the experimental part.
 
 ## 4. Experiments/Results/Discussion
 
