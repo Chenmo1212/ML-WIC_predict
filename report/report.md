@@ -51,8 +51,13 @@ And the seleted features set is:
 | County      | State           | Population_Estimate_2016 | LACCESS_POP15 | GROCPTH16 |
 | SUPERCPTH16 | CONVSPTH16      | SPECSPTH16               | WICSPTH16     | FFRPTH16  |
 | FSRPTH16    | FOODINSEC_15_17 | FMRKT_WIC18              | POVRATE15     | PCT_WIC17 |
-
-![下载](report.assets/test.png)
+Here is the heatmap of correlation
+![Heatmap 0](corr/corr_heatmap_0.jpg)
+![Heatmap 0](corr/corr_heatmap_1.jpg)
+![Heatmap 0](corr/corr_heatmap_2.jpg)
+![Heatmap 0](corr/corr_heatmap_3.jpg)
+![Heatmap 0](corr/corr_heatmap_4.jpg)
+![Heatmap 0](corr/corr_heatmap_5.jpg)
 
 
 ## 3. Methods
