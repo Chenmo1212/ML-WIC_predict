@@ -31,7 +31,8 @@ def normalization(data):
         data.iloc[:, i] = (data.iloc[:, i] - avg) / std
 
 
-# 计算交叉验证结果的均值和标准差， 默认为五折交叉验证，结果为相关系数R2
+# Calculate the mean and standard deviation of the cross-validation results,
+# the default is five-fold cross-validation, and the result is the correlation coefficient R2
 def cross_validate(models, cv=5, scoring='r2'):
     means = []
     stds = []
